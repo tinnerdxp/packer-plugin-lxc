@@ -45,6 +45,15 @@ binary file can be found in the root directory.
 To install the compiled plugin, please follow the official Packer documentation
 on [installing a plugin](https://www.packer.io/docs/extending/plugins/#installing-plugins).
 
+### Useful command during development
+
+It's a bit problematic to debug this using dlv - so what I used to do is to go build and test using the following command to install
+
+```
+go build && mv ./packer-plugin-lxc ~/.config/packer/plugins/github.com/hashicorp/lxc/packer-plugin-lxc_v1.0.3_x5.0_linux_amd64 && sha256sum ~/.config/packer/plugins/github.com/hashicorp/lxc/packer-plugin-lxc_v1.0.3_x5.0_linux_amd64 | cut -d' ' -f1 > ~/.config/packer/plugins/github.com/hashicorp/lxc/packer-plugin-lxc_v1.0.3_x5.0_linux_amd64_SHA256SUM
+
+```
+
 
 ### Configuration
 
