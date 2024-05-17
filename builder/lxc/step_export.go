@@ -99,16 +99,17 @@ func (s *stepExport) Run(ctx context.Context, state multistep.StateBag) multiste
 		return multistep.ActionHalt
 	}
 	
-	commands := make([][]string, 3)
+	commands := make([][]string, 4)
 	commands[0] = []string{
 		"lxc-stop", "--name", name,
 	}
-	// commands[1] = []string{
-		//"sudo", "setfacl", "-R", "-m", fmt.Sprintf("u:%s:rwx", user.Uid), filepath.Join(containerDir, "rootfs"),
+	commands[1] = []string{
+		"sudo", "chmod", "-R", "0777", config.OutputDir,
+		// "sudo", "setfacl", "-R", "-m", fmt.Sprintf("u:%s:rwx", user.Uid), filepath.Join(containerDir, "rootfs"),
 		// "sudo", "setfacl", "-R", "-m", fmt.Sprintf("u:%s:rwx", "1000000"), filepath.Join(containerDir, "rootfs"),
-	// }
+	}
 
-	commands[1] = func() []string {
+	commands[2] = func() []string {
 		var cmd []string = []string{
 			"lxc-usernsexec",
 		}
@@ -120,7 +121,7 @@ func (s *stepExport) Run(ctx context.Context, state multistep.StateBag) multiste
 	// command[2] = []string{
 	// 				"lxc-usernsexec", perms..., "--", "tar", "-C", fmt.Sprintf("%s/rootfs", containerDir), "--numeric-owner", "--anchored", "--exclude=./rootfs/dev/log", "-czf", outputPath, "./",
 	// }
-	commands[2] = []string{
+	commands[3] = []string{
 		"chmod", "+x", configFilePath,
 	}
 
